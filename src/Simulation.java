@@ -59,6 +59,8 @@ public class Simulation {
                         }
                     }
 
+                    //TODO properly implement "exhange" of particles between clusters
+                    //TODO add a check if "p" has 0 particles
                     Location newLocation = new Location(newHeight, newWidth);
                     if(null != surface.getObjectAt(newLocation))    {
                         p.decreaseParticles();
@@ -67,6 +69,7 @@ public class Simulation {
                         }
                     }
                     else {
+                        p.decreaseParticles();
                         ParticleCluster newCluster = new ParticleCluster(0, MAX_PARTICLES, newLocation);
                         newClusters.add(newCluster);
                         surface.place(newCluster, newLocation);
