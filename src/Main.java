@@ -1,9 +1,9 @@
 public class Main {
 
     public static void main(String[] args) {
-        int height = 10;
-        int width = 10;
-        int steps = 10;
+        int height = 11;
+        int width = 11;
+        int steps = 1000;
         Simulation sim = new Simulation(height, width, steps);
         sim.run();
     }

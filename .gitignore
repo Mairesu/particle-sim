@@ -6,6 +6,7 @@
 # IntelliJ files #
 \.idea/
 *.iml
+\out/
 
 
 # Package Files #

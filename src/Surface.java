@@ -30,4 +30,12 @@ public class Surface {
         return getObjectAt(location.getRow(), location.getCol());
     }
 
+    public int getHeight()  {
+        return this.height;
+    }
+
+    public int getWidth()   {
+        return this.width;
+    }
+
 }

@@ -16,11 +16,14 @@ public class Simulation {
     private static final int STARTING_PARTICLES = 5;
     private static final int MAX_PARTICLES = 10;
 
+    private SimulationView simView;
+
     public Simulation(int height, int width, int maxStep) {
         this.surface = new Surface(height, width);
         this.maxStep = maxStep;
         this.height = height;
         this.width = width;
+        this.simView = new SimulationView(this.height, this.width);
         this.startingLocation = new Location(height / 2,  width / 2);
         clusters = new ArrayList<>();
     }
@@ -49,7 +52,7 @@ public class Simulation {
                     int randomNumber = rng.nextInt(100) + 1; //Random number between 1 and 100;
 
                     //Figure out if we want to move the particle, and where
-                    if(randomNumber <= 10) { //Move diagonally
+                    if(randomNumber <= 2) { //Move diagonally
                         //Find new diagonal location
                         Location newLocation = findDiagonalLocation(p);
 
@@ -68,7 +71,7 @@ public class Simulation {
                             newCluster.increaseParticles();
                         }
                     }
-                    else if(randomNumber <= 30) { //Move up or down
+                    else if(randomNumber <= 5) { //Move up or down
                         //Find new cardinal location
                         Location newLocation = findCardinalLocation(p);
 
@@ -102,9 +105,12 @@ public class Simulation {
         }
 
         //Use this in case you want particles to continuously appear in the middle
-        //increaseParticles(1, startingLocation);
+        increaseParticles(1, startingLocation);
 
+        simView.showStatus(surface);
         step++;
+
+        delay(10);
     }
 
     private void populate() {
@@ -169,5 +175,14 @@ public class Simulation {
 
     private void increaseParticles(int amount, Location location)    {
         ((ParticleCluster) surface.getObjectAt(location)).increaseParticlesBy(amount);
+    }
+
+    private void delay(int millisec) {
+        try {
+            Thread.sleep(millisec);
+        }
+        catch(InterruptedException ie) {
+            // wake up
+        }
     }
 }
