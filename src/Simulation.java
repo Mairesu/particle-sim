@@ -13,8 +13,13 @@ public class Simulation {
     private Random rng = new Random();
     private Location startingLocation;
 
-    private static final int STARTING_PARTICLES = 5;
+    private static final int STARTING_PARTICLES = 1;
     private static final int MAX_PARTICLES = 10;
+
+    //Total chance for moving in any diagonal direction. the chance is distributed between the available slots in those directions
+    private static final int DIAGONAL_CHANCE = 0;
+    //Total chance for up/down/left/right. the chance is distributed between the available slots in those directions
+    private static final int CARDINAL_CHANCE = 10;
 
     private SimulationView simView;
 
@@ -52,7 +57,7 @@ public class Simulation {
                     int randomNumber = rng.nextInt(100) + 1; //Random number between 1 and 100;
 
                     //Figure out if we want to move the particle, and where
-                    if(randomNumber <= 2) { //Move diagonally
+                    if(randomNumber <= DIAGONAL_CHANCE) { //Move diagonally
                         //Find new diagonal location
                         Location newLocation = findDiagonalLocation(p);
 
@@ -71,7 +76,7 @@ public class Simulation {
                             newCluster.increaseParticles();
                         }
                     }
-                    else if(randomNumber <= 5) { //Move up or down
+                    else if(randomNumber <= CARDINAL_CHANCE) { //Move up or down
                         //Find new cardinal location
                         Location newLocation = findCardinalLocation(p);
 
@@ -105,12 +110,12 @@ public class Simulation {
         }
 
         //Use this in case you want particles to continuously appear in the middle
-        increaseParticles(1, startingLocation);
+        //increaseParticles(1, startingLocation);
 
         simView.showStatus(surface);
         step++;
 
-        delay(10);
+        delay(100);
     }
 
     private void populate() {
