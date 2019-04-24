@@ -6,20 +6,20 @@ public class Simulation {
 
     private int height;
     private int width;
-    private int step = 0;
+    private int step = 1;
     private int maxStep;
     private Surface surface;
     private List<ParticleCluster> clusters;
     private Random rng = new Random();
     private Location startingLocation;
 
-    private static final int STARTING_PARTICLES = 1;
+    private static final int STARTING_PARTICLES = 10;
     private static final int MAX_PARTICLES = 10;
 
     //Total chance for moving in any diagonal direction. the chance is distributed between the available slots in those directions
     private static final int DIAGONAL_CHANCE = 0;
     //Total chance for up/down/left/right. the chance is distributed between the available slots in those directions
-    private static final int CARDINAL_CHANCE = 10;
+    private static final int CARDINAL_CHANCE = 20;
 
     private SimulationView simView;
 
@@ -115,13 +115,25 @@ public class Simulation {
         simView.showStatus(surface);
         step++;
 
-        delay(100);
+        delay(1000);
     }
 
     private void populate() {
+        System.out.println("\n- Step: " + step + " -");
         ParticleCluster startingCluster = new ParticleCluster(STARTING_PARTICLES, MAX_PARTICLES, startingLocation);
         clusters.add(startingCluster);
         surface.place(startingCluster, startingLocation);
+
+        for(ParticleCluster p : clusters) {
+            if(p.getParticles() > 0) {
+                System.out.println("> " + p.getLocation().toString() + " | " + p.getParticles() + "/" + p.getParticleMax());
+            }
+        }
+
+        simView.showStatus(surface);
+        step++;
+
+        delay(1000);
     }
 
     private Location findDiagonalLocation(ParticleCluster cluster) {

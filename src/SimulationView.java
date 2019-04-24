@@ -62,43 +62,43 @@ public class SimulationView extends JFrame {
                 break;
 
             case 1:
-                returnColor = Color.decode("#addafb");
+                returnColor = Color.decode("#e1f5fe");
                 break;
 
             case 2:
-                returnColor = Color.decode("#a1d5fa");
+                returnColor = Color.decode("#b3e5fc");
                 break;
 
             case 3:
-                returnColor = Color.decode("#96d0fa");
+                returnColor = Color.decode("#81d4fa");
                 break;
 
             case 4:
-                returnColor = Color.decode("#8acbf9");
+                returnColor = Color.decode("#4fc3f7");
                 break;
 
             case 5:
-                returnColor = Color.decode("#7fc6f9");
+                returnColor = Color.decode("#29b6f6");
                 break;
 
             case 6:
-                returnColor = Color.decode("#74b4e3");
+                returnColor = Color.decode("#03a9f4");
                 break;
 
             case 7:
-                returnColor = Color.decode("#68a3cc");
+                returnColor = Color.decode("#039be5");
                 break;
 
             case 8:
-                returnColor = Color.decode("#5d91b6");
+                returnColor = Color.decode("#0288d1");
                 break;
 
             case 9:
-                returnColor = Color.decode("#517f9f");
+                returnColor = Color.decode("#0277bd");
                 break;
 
             case 10:
-                returnColor = Color.decode("#466c88");
+                returnColor = Color.decode("#01579b");
                 break;
 
             default:
