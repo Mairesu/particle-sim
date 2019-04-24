@@ -1,18 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SimulationView extends JFrame {
 
-    private Map<Integer, Color> colorMap;
     private SurfaceView surfaceView;
 
     public SimulationView(int height, int width) {
         setTitle("Particle Simulation");
-
-        colorMap = new HashMap<>();
-        setupColors();
 
         setLocation(100, 50);
 
@@ -26,7 +20,7 @@ public class SimulationView extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public void showStatus(Surface surface)    {
+    public void showStatus(Surface surface, int highestParticleCount)    {
         if (!isVisible()) {
             setVisible(true);
         }
@@ -37,68 +31,68 @@ public class SimulationView extends JFrame {
             for (int col = 0; col < surface.getWidth(); col++) {
                 ParticleCluster p = (ParticleCluster) surface.getObjectAt(row, col);
                 if (p != null) {
-                    surfaceView.drawMark(col, row, getColor(p.getParticles()));
+                    surfaceView.drawMark(col, row, getColor(p.getParticles(), highestParticleCount));
                 } else {
-                    surfaceView.drawMark(col, row, getColor(0));
+                    surfaceView.drawMark(col, row, getColor(0, -1));
                 }
             }
         }
         surfaceView.repaint();
     }
 
-    private void setupColors() {
-        for(int i = 0; i <= 10; i++) {
-            colorMap.put(i, getColor(i));
-        }
-    }
-
-    private Color getColor(int value) {
+    private Color getColor(int value, int highestParticleCount) {
 
         Color returnColor;
+        int switchValue = value;
 
-        switch(value) {
+        if(highestParticleCount > 10)   {
+            double slope = 10d/(double)highestParticleCount;
+            switchValue = (int)Math.ceil(slope*(value));
+        }
+
+        switch(switchValue) {
             case 0:
                 returnColor = Color.decode("#ffffff");
                 break;
 
             case 1:
-                returnColor = Color.decode("#e1f5fe");
+                returnColor = Color.decode("#b4ff99");
                 break;
 
             case 2:
-                returnColor = Color.decode("#b3e5fc");
+                returnColor = Color.decode("#86ef7f");
                 break;
 
             case 3:
-                returnColor = Color.decode("#81d4fa");
+                returnColor = Color.decode("#68e07b");
                 break;
 
             case 4:
-                returnColor = Color.decode("#4fc3f7");
+                returnColor = Color.decode("#53d180");
                 break;
 
             case 5:
-                returnColor = Color.decode("#29b6f6");
+                returnColor = Color.decode("#40c18a");
                 break;
 
             case 6:
-                returnColor = Color.decode("#03a9f4");
+                returnColor = Color.decode("#2fb295");
                 break;
 
             case 7:
-                returnColor = Color.decode("#039be5");
+                returnColor = Color.decode("#20a3a1");
                 break;
 
             case 8:
-                returnColor = Color.decode("#0288d1");
+                returnColor = Color.decode("#137a93");
                 break;
 
             case 9:
-                returnColor = Color.decode("#0277bd");
+                returnColor = Color.decode("#085284");
                 break;
 
             case 10:
-                returnColor = Color.decode("#01579b");
+                returnColor = Color.decode("#002d75");
                 break;
 
             default:

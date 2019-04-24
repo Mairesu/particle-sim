@@ -13,21 +13,31 @@ public class Simulation {
     private Random rng = new Random();
     private Location startingLocation;
 
+    private boolean simulateWithDelay;
+    private boolean addMoreParticles;
+
+    /*
+    ##### CHANGE THESE VALUES TO CHANGE THE BEHAVIOUR OF THE SIMULATOR
+    */
     private static final int STARTING_PARTICLES = 10;
     private static final int MAX_PARTICLES = 10;
-
     //Total chance for moving in any diagonal direction. the chance is distributed between the available slots in those directions
     private static final int DIAGONAL_CHANCE = 0;
     //Total chance for up/down/left/right. the chance is distributed between the available slots in those directions
     private static final int CARDINAL_CHANCE = 20;
+    /*
+    #####
+    */
 
     private SimulationView simView;
 
-    public Simulation(int height, int width, int maxStep) {
+    public Simulation(int height, int width, int maxStep, boolean simulateWithDelay, boolean addMoreParticles) {
         this.surface = new Surface(height, width);
         this.maxStep = maxStep;
         this.height = height;
         this.width = width;
+        this.simulateWithDelay = simulateWithDelay;
+        this.addMoreParticles = addMoreParticles;
         this.simView = new SimulationView(this.height, this.width);
         this.startingLocation = new Location(height / 2,  width / 2);
         clusters = new ArrayList<>();
@@ -53,8 +63,8 @@ public class Simulation {
                 int initialParticles = p.getParticles();
                 int particlesChecked = 0;
 
-                while(initialParticles > particlesChecked) { //Might cause index out of bounds(?)
-                    int randomNumber = rng.nextInt(100) + 1; //Random number between 1 and 100;
+                while(initialParticles > particlesChecked) {
+                    int randomNumber = rng.nextInt(100) + 1; //Random number between 1 and 100
 
                     //Figure out if we want to move the particle, and where
                     if(randomNumber <= DIAGONAL_CHANCE) { //Move diagonally
@@ -63,7 +73,7 @@ public class Simulation {
 
                         //Check if the new location contains a cluster, if not create one
                         if(null != surface.getObjectAt(newLocation)) {
-                            if(((ParticleCluster) surface.getObjectAt(newLocation)).getParticles() < 10)    {
+                            if(((ParticleCluster) surface.getObjectAt(newLocation)).getParticles() < MAX_PARTICLES)    {
                                 p.decreaseParticles();
                                 ((ParticleCluster) surface.getObjectAt(newLocation)).increaseParticles();
                             }
@@ -76,13 +86,13 @@ public class Simulation {
                             newCluster.increaseParticles();
                         }
                     }
-                    else if(randomNumber <= CARDINAL_CHANCE) { //Move up or down
+                    else if(randomNumber <= DIAGONAL_CHANCE + CARDINAL_CHANCE) { //Move up or down
                         //Find new cardinal location
                         Location newLocation = findCardinalLocation(p);
 
                         //Check if the new location contains a cluster, if not create one
                         if(null != surface.getObjectAt(newLocation)) {
-                            if(((ParticleCluster) surface.getObjectAt(newLocation)).getParticles() < 10)    {
+                            if(((ParticleCluster) surface.getObjectAt(newLocation)).getParticles() < MAX_PARTICLES)    {
                                 p.decreaseParticles();
                                 ((ParticleCluster) surface.getObjectAt(newLocation)).increaseParticles();
                             }
@@ -103,21 +113,26 @@ public class Simulation {
 
         clusters.addAll(newClusters);
 
+        //Use this in case you want particles to continuously appear in the middle
+        if(addMoreParticles) {
+            increaseParticles(STARTING_PARTICLES, startingLocation);
+        }
+
         for(ParticleCluster p : clusters) {
             if(p.getParticles() > 0) {
                 System.out.println("> " + p.getLocation().toString() + " | " + p.getParticles() + "/" + p.getParticleMax());
             }
         }
 
-        //Use this in case you want particles to continuously appear in the middle
-        //increaseParticles(1, startingLocation);
-
-        simView.showStatus(surface);
+        simView.showStatus(surface, MAX_PARTICLES);
         step++;
 
-        delay(1000);
+        if(simulateWithDelay) {
+            delay(200);
+        }
     }
 
+    @SuppressWarnings("Duplicates")
     private void populate() {
         System.out.println("\n- Step: " + step + " -");
         ParticleCluster startingCluster = new ParticleCluster(STARTING_PARTICLES, MAX_PARTICLES, startingLocation);
@@ -130,12 +145,15 @@ public class Simulation {
             }
         }
 
-        simView.showStatus(surface);
+        simView.showStatus(surface, MAX_PARTICLES);
         step++;
 
-        delay(1000);
+        if(simulateWithDelay) {
+            delay(200);
+        }
     }
 
+    @SuppressWarnings("Duplicates")
     private Location findDiagonalLocation(ParticleCluster cluster) {
         Location oldLocation = cluster.getLocation();
         //Figure out which corner to move the particle to
@@ -163,6 +181,7 @@ public class Simulation {
         return possibleLocations.get(randomNumber);
     }
 
+    @SuppressWarnings("Duplicates")
     private Location findCardinalLocation(ParticleCluster cluster) {
         Location oldLocation = cluster.getLocation();
         //Figure out which corner to move the particle to
