@@ -6,7 +6,7 @@ public class Simulation {
 
     private int height;
     private int width;
-    private int step = 1;
+    private int step = 0;
     private int maxStep;
     private Surface surface;
     private List<ParticleCluster> clusters;
@@ -55,6 +55,8 @@ public class Simulation {
         System.out.println("\n- Step: " + step + " -");
 
         ArrayList<ParticleCluster> newClusters = new ArrayList<>();
+
+        int highestParticleCount = 0;
 
         for(ParticleCluster p : clusters) {
             //Check if the cluster has more than 0 particles in it, otherwise skip it
@@ -120,11 +122,21 @@ public class Simulation {
 
         for(ParticleCluster p : clusters) {
             if(p.getParticles() > 0) {
-                System.out.println("> " + p.getLocation().toString() + " | " + p.getParticles() + "/" + p.getParticleMax());
+                //System.out.println("> " + p.getLocation().toString() + " | " + p.getParticles() + "/" + p.getParticleMax());
+                if(!addMoreParticles && p.getParticles() > highestParticleCount)    {
+                    highestParticleCount = p.getParticles();
+                }
             }
         }
 
-        simView.showStatus(surface, MAX_PARTICLES);
+        if(addMoreParticles) {
+            simView.showStatus(surface, MAX_PARTICLES);
+        }
+        else {
+            simView.showStatus(surface, highestParticleCount);
+            System.out.println("Highest Particle count: " + highestParticleCount);
+        }
+
         step++;
 
         if(simulateWithDelay) {

@@ -33,7 +33,7 @@ public class SimulationView extends JFrame {
                 if (p != null) {
                     surfaceView.drawMark(col, row, getColor(p.getParticles(), highestParticleCount));
                 } else {
-                    surfaceView.drawMark(col, row, getColor(0, -1));
+                    surfaceView.drawMark(col, row, getColor(0, 0));
                 }
             }
         }
@@ -45,7 +45,10 @@ public class SimulationView extends JFrame {
         Color returnColor;
         int switchValue = value;
 
-        if(highestParticleCount > 10)   {
+        if(value > highestParticleCount)    {
+            switchValue = 10;
+        }
+        else if(highestParticleCount > 10)   {
             double slope = 10d/(double)highestParticleCount;
             switchValue = (int)Math.ceil(slope*(value));
         }
