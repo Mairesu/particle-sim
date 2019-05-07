@@ -5,7 +5,12 @@ public class ParticleCluster {
     private Location location;
 
     public ParticleCluster(int startingParticles, int particleMax, Location location)   {
-        this.particles = startingParticles;
+        if(startingParticles > particleMax) {
+            this.particles = particleMax;
+        }
+        else {
+            this.particles = startingParticles;
+        }
         this.particleMax = particleMax;
         this.location = location;
     }
@@ -23,9 +28,13 @@ public class ParticleCluster {
     }
 
     public void increaseParticlesBy(int increase) {
-        if(particles < particleMax
-            && ((particles + increase) < particleMax)) {
-            this.particles = this.particles + increase;
+        if(particles < particleMax) {
+            if((particles + increase) < particleMax){
+                this.particles = this.particles + increase;
+            }
+            else {
+                this.particles = this.particleMax;
+            }
         }
     }
 

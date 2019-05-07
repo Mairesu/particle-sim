@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SurfaceView extends JPanel {
-    private static final int GRID_VIEW_SCALING_FACTOR = 40;
+    private static final int GRID_VIEW_SCALING_FACTOR = 15;
 
     private int gridWidth, gridHeight;
     private int xScale, yScale;
