@@ -1,9 +1,9 @@
 public class Main {
 
     public static void main(String[] args) {
-        int height = 51;
-        int width = 51;
-        int steps = 10000;
+        int height = 99;
+        int width = 99;
+        int steps = Integer.MAX_VALUE;
         boolean delay = false;
         boolean addMoreParticles = true;
         Simulation sim = new Simulation(height, width, steps, delay, addMoreParticles);

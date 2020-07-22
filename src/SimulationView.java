@@ -1,11 +1,24 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class SimulationView extends JFrame {
 
     private SurfaceView surfaceView;
+    private HashMap<Integer, Color> colourMap;
+    private int colours;
 
     public SimulationView(int height, int width) {
+        colourMap = new HashMap<>();
+        fillColourHashMap();
+        colours = colourMap.size()-1; //Amount of colours, excluding white
+
         setTitle("Particle Simulation");
 
         setLocation(100, 50);
@@ -30,7 +43,7 @@ public class SimulationView extends JFrame {
         for (int row = 0; row < surface.getHeight(); row++) {
             for (int col = 0; col < surface.getWidth(); col++) {
                 ParticleCluster p = (ParticleCluster) surface.getObjectAt(row, col);
-                if (p != null) {
+                if (p != null && p.getParticles() > 0)  {
                     surfaceView.drawMark(col, row, getColor(p.getParticles(), highestParticleCount));
                 } else {
                     surfaceView.drawMark(col, row, getColor(0, 0));
@@ -40,69 +53,27 @@ public class SimulationView extends JFrame {
         surfaceView.repaint();
     }
 
+    private void fillColourHashMap()    {
+
+        try(Stream<String> s = Files.lines(Paths.get("src/resources/colours.txt"), Charset.defaultCharset()))    {
+            AtomicInteger number = new AtomicInteger();
+            s.forEachOrdered(line -> {
+                this.colourMap.put(number.get(), Color.decode(line));
+                number.getAndIncrement();
+            });
+        }
+        catch(IOException e) {
+            System.out.println("Colour file read failed");
+            e.printStackTrace();
+        }
+        //Add to colour map
+    }
+
     private Color getColor(int value, int highestParticleCount) {
 
-        Color returnColor;
-        int switchValue = value;
+        double slope = (double)this.colours/(double)highestParticleCount;
+        int switchValue = (int)Math.ceil(slope*(value));
 
-        if(value > highestParticleCount)    {
-            switchValue = 10;
-        }
-        else if(highestParticleCount > 10)   {
-            double slope = 10d/(double)highestParticleCount;
-            switchValue = (int)Math.ceil(slope*(value));
-        }
-
-        switch(switchValue) {
-            case 0:
-                returnColor = Color.decode("#ffffff");
-                break;
-
-            case 1:
-                returnColor = Color.decode("#b4ff99");
-                break;
-
-            case 2:
-                returnColor = Color.decode("#86ef7f");
-                break;
-
-            case 3:
-                returnColor = Color.decode("#68e07b");
-                break;
-
-            case 4:
-                returnColor = Color.decode("#53d180");
-                break;
-
-            case 5:
-                returnColor = Color.decode("#40c18a");
-                break;
-
-            case 6:
-                returnColor = Color.decode("#2fb295");
-                break;
-
-            case 7:
-                returnColor = Color.decode("#20a3a1");
-                break;
-
-            case 8:
-                returnColor = Color.decode("#137a93");
-                break;
-
-            case 9:
-                returnColor = Color.decode("#085284");
-                break;
-
-            case 10:
-                returnColor = Color.decode("#002d75");
-                break;
-
-            default:
-                returnColor = Color.decode("#ffffff");
-                break;
-        }
-
-        return returnColor;
+        return colourMap.get(switchValue);
     }
 }

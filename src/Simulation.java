@@ -19,12 +19,12 @@ public class Simulation {
     /*
     ##### CHANGE THESE VALUES TO CHANGE THE BEHAVIOUR OF THE SIMULATOR
     */
-    private static final int STARTING_PARTICLES = 10;
-    private static final int MAX_PARTICLES = 10;
+    private static final int STARTING_PARTICLES = 512;
+    private static final int MAX_PARTICLES = 512;
     //Total chance for moving in any diagonal direction. the chance is distributed between the available slots in those directions
-    private static final int DIAGONAL_CHANCE = 0;
+    private static final int DIAGONAL_CHANCE = 10; // out of 100, any diagonal
     //Total chance for up/down/left/right. the chance is distributed between the available slots in those directions
-    private static final int CARDINAL_CHANCE = 20;
+    private static final int CARDINAL_CHANCE = 20; // out of 100, any cardinal
     /*
     #####
     */
@@ -140,7 +140,7 @@ public class Simulation {
         step++;
 
         if(simulateWithDelay) {
-            delay(200);
+            delay(25);
         }
     }
 
@@ -161,7 +161,7 @@ public class Simulation {
         step++;
 
         if(simulateWithDelay) {
-            delay(200);
+            delay(25);
         }
     }
 

@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SurfaceView extends JPanel {
-    private static final int GRID_VIEW_SCALING_FACTOR = 15;
+    private static final int GRID_VIEW_SCALING_FACTOR = 5;
 
     private int gridWidth, gridHeight;
     private int xScale, yScale;
@@ -41,7 +41,7 @@ public class SurfaceView extends JPanel {
 
     public void drawMark(int x, int y, Color color) {
         g.setColor(color);
-        g.fillRect(x * xScale, y * yScale, xScale - 1, yScale - 1);
+        g.fillRect(x * xScale, y * yScale, xScale, yScale);
     }
 
     @Override
